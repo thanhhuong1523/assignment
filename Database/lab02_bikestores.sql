@@ -259,3 +259,101 @@ order by total_products desc;
 -- 1) Retrieve the product name and list price from the "products" table along with the 
 -- corresponding brand name from the "brands" table. Only include products with a list 
 -- price greater than $1000. 
+select p.product_name, p.list_price, b.brand_name
+from products p
+join brands b on p.brand_id = b.brand_id
+where p.list_price > 1000;
+
+-- 2) Retrieve all customers from the "customers" table along with their corresponding 
+-- orders from the "orders" table. Include only customers who have placed orders with an 
+-- order status of “Completed" (order_status = 4) 
+select c.customer_id, c.first_name, c.last_name, o.order_id, o.order_status
+from customers c
+join orders o on c.customer_id = o.customer_id
+where o.order_status = 4;
+
+-- 3) Retrieve the first and last names of employees along with the first and last names of 
+-- their respective managers. Assume the "staffs" table contains a column "manager_id" 
+-- that references another row in the same "staffs" table. 
+select e.first_name as employee_first_name,
+		e.last_name as employee_last_name,
+        e.email as employee_email,
+        m.first_name as manager_first_name,
+        m.last_name as manager_last_name,
+        m.email as manager_email
+from staffs e
+left join staffs m on e.manager_id = m.staff_id;
+
+-- 4) Retrieve all products from the "products" table along with their corresponding brand 
+-- names from the "brands" table. Include products even if they don't have a matching brand. 
+select p.product_name, b.brand_name
+from products p
+left join brands b on p.brand_id = b.brand_id;
+
+-- 5) Retrieve the product name and model year from the "products" table along with the 
+-- corresponding brand name from the "brands" table. Only include products with a model 
+-- year of 2016 and above. 
+select p.product_name, p.model_year, b.brand_name
+from products p
+left join brands b on p.brand_id = b.brand_id
+where p.model_year >= 2016;
+
+-- 6) Retrieve the order ID, product name, and quantity from the "order_items" table along 
+-- with the corresponding product information from the "products" table. 
+select o.order_id, p.product_name, o.quantity
+from order_items o
+join products p on o.product_id = p.product_id;
+
+-- 7) Retrieve all products from the "products" table along with their corresponding 
+-- category names from the "categories" table. Include all products, but limit the results to 
+-- products in the 'Mountain Bikes' category. 
+select p.product_name, c.category_name
+from products p
+join categories c on p.category_id = c.category_id
+where c.category_name = "Mountain Bikes";
+
+-- 8) Retrieve the product name, list price, and category name from the "products" table 
+-- along with the corresponding brand name from the "brands" table. Only include products 
+-- where the list price is greater than $500 and the category name is 'Electric Bikes'. 
+select p.product_name, p.list_price, c.category_name, b.brand_name
+from products p
+left join categories c on p.category_id = c.category_id
+left join brands b on p.brand_id = b.brand_id
+where p.list_price > 500 and c.category_name = "Electric Bikes";
+
+-- 9) Retrieve all customers from the "customers" table along with their corresponding 
+-- orders from the "orders" table. Include all customers, but only include orders where the 
+-- shipped date is null. 
+select c.customer_id, c.first_name, c.last_name, o.order_id, o.shipped_date
+from customers c
+left join orders o on c.customer_id = o.customer_id
+where o.shipped_date is null;
+
+-- 10) Retrieve the store name from the "stores" table along with the count of orders placed 
+-- from each store. Include all stores, even if they haven't received any orders. 
+select s.store_name, count(o.order_id) as order_count
+from stores s
+left join orders o on s.store_id = o.store_id
+group by s.store_id;
+
+-- 11) This query retrieves all orders for a specific store (store ID = 1)  along with the staff 
+-- who processed them 
+select o.order_id, s.first_name, s.last_name, o.order_date
+from orders o
+join staffs s on o.staff_id = s.staff_id
+where o.store_id = 1
+order by o.order_id desc;
+
+-- 12) This query retrieves all customers who have placed orders in the year 2016
+select concat(c.first_name, ' ', c.last_name) as customer_name, o.order_id, o.order_date
+from customers c
+join orders o on c.customer_id = o.customer_id
+where year(o.order_date) = 2016
+order by o.order_date desc;
+
+-- 13) This query retrieves employees and their corresponding orders, but only for orders 
+-- placed within the last twelve months
+select s.first_name, s.last_name, o.order_id, o.order_date
+from staffs s
+join orders o on s.staff_id = o.order_id
+where o.order_date >= curdate() - interval 12 month;
