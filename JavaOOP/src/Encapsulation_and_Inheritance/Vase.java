@@ -31,25 +31,8 @@ public class Vase extends Item {
     }
 
     public void input(Scanner scanner) {
-        inputHeight(scanner);
+        inputNumber(scanner, height);
         inputMaterial(scanner);
-    }
-
-    private void inputHeight(Scanner scanner) {
-        String line;
-        try {
-            while (true) {
-                line = scanner.nextLine();
-                if(line == null || line.trim().isEmpty()) {
-                    System.out.println("Empty height!");
-                } else {
-                    height = Integer.parseInt(line.trim());
-                    break;
-                }
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid number!");
-        }
     }
 
     private void inputMaterial(Scanner scanner) {
@@ -65,6 +48,6 @@ public class Vase extends Item {
     }
 
     public String toString() {
-        return String.format(" %5d | %-10s", height, material);
+        return String.format("%-8s | %5d | %-10s | %5d | %-10s", id, value, creator, height, material);
     }
 }

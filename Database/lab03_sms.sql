@@ -112,6 +112,10 @@ drop procedure if exists delete_a_customer;
 delimiter //
 create procedure delete_a_customer(in v_customer_id int)
 begin
+    declare exit handler for sqlexception rollback;
+
+    start transaction;
+
 	delete li
     from LineItem li
     join Orders o on li.order_id = o.order_id
@@ -122,6 +126,8 @@ begin
     
     delete from Customer
     where customer_id = v_customer_id;
+
+    commit;
 end //
 delimiter ;
 

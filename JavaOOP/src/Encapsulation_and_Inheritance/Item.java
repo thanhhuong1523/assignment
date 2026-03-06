@@ -2,7 +2,7 @@ package Encapsulation_and_Inheritance;
 
 import java.util.Scanner;
 
-abstract public class Item {
+public class Item {
     protected String id;
     protected int value;
     protected String creator;
@@ -41,8 +41,7 @@ abstract public class Item {
 
     public void input(Scanner scanner) {
         inputID(scanner);
-        inputValue(scanner);
-        inputValue(scanner);
+        inputNumber(scanner, value);
     }
 
     private void inputID(Scanner scanner) {
@@ -57,23 +56,6 @@ abstract public class Item {
         }
     }
 
-    private void inputValue(Scanner scanner) {
-        String line;
-        try {
-            while(true) {
-                line = scanner.nextLine();
-                if(line == null || line.trim().isEmpty()) {
-                    System.out.println("Empty value!");
-                } else {
-                    value = Integer.parseInt(line.trim());
-                    break;
-                }
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid number!");
-        }
-    }
-
     private void inputCreator(Scanner scanner) {
         while (true) {
             creator = scanner.nextLine();
@@ -83,6 +65,23 @@ abstract public class Item {
                 creator = creator.trim();
                 break;
             }
+        }
+    }
+
+    public void inputNumber(Scanner scanner, int num) {
+        String line;
+        try {
+            while (true) {
+                line = scanner.nextLine();
+                if(line == null || line.trim().isEmpty()) {
+                    System.out.println("Empty value!");
+                } else {
+                    num = Integer.parseInt(line.trim());
+                    break;
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number!");
         }
     }
 
