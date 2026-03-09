@@ -8,7 +8,7 @@ void inputArray(int arr[], int *arrLength)
     while (1)
     {
         scanf("%d", arrLength);
-        if (*arrLength < 1 || *arrLength > 100)
+        if (*arrLength < 1 || *arrLength > MAX)
         {
             printf("Invalid array's length! Please input again!!\n");
         }
