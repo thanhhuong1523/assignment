@@ -1,8 +1,5 @@
 package Collections.entities;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Course {
     private String code;
     private String name;
@@ -62,7 +59,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("%-6s | %-20s | %-6s | %-8d | %-12s",
+        return String.format("%-6s | %-15s | %-6s | %-8d | %-12s",
                 code, name, status, duration, flag);
     }
 }

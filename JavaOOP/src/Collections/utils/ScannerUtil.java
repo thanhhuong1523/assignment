@@ -41,7 +41,7 @@ public class ScannerUtil {
                 short shortValue = Short.parseShort(value);
 
                 if(shortValue <= 0) {
-                    System.out.println("Negative value!");
+                    System.out.println("Please enter positive value!");
                 } else return shortValue;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number!");
