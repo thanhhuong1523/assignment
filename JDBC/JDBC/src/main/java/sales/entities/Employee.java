@@ -59,7 +59,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("%-5s | %-8s | %-8s | %-10s | %-5s",
+        return String.format("%-5s | %-12s | %-10s | %-10s | %-5s",
                 id, lastName, firstName, birthday, supervisor);
     }
 }

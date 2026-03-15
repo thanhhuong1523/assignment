@@ -5,13 +5,14 @@ import sales.entities.Customer;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerDAO {
-    private Connection conn;
+public class CustomerDAO implements IDAO<Customer> {
+    private final Connection conn;
 
     public CustomerDAO(Connection conn) {
         this.conn = conn;
     }
 
+    @Override
     public boolean insert(Customer customer) throws SQLException {
         if(conn == null) {
             return false;
@@ -39,13 +40,14 @@ public class CustomerDAO {
         return false;
     }
 
+    @Override
     public boolean update(int id, Customer customer) throws SQLException {
         if(conn == null) {
             return false;
         }
 
         String sql = "UPDATE customers " +
-                    "SET customer_name = ?, contact_name = ?, address = ?, city = ?, postal_code = ?, country = ?" +
+                    "SET customer_name = ?, contact_name = ?, address = ?, city = ?, postal_code = ?, country = ? " +
                     "WHERE customer_id = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -58,14 +60,15 @@ public class CustomerDAO {
             ps.setString(index++, customer.getCountry());
             ps.setInt(index++, id);
 
-            int rs = ps.executeUpdate();
+            if(ps.executeUpdate() > 0) return true;
 
-            return rs > 0;
         } catch (SQLException e) {
             throw new SQLException("Cannot update this customer: ", e);
         }
+        return false;
     }
 
+    @Override
     public boolean delete(int id) throws SQLException {
         if(conn == null) {
             return false;
@@ -85,7 +88,9 @@ public class CustomerDAO {
                 ps2.setInt(1, id);
                 int rs = ps2.executeUpdate();
 
-                return rs > 0;
+                conn.commit();
+
+                if(rs > 0) return true;
             }
         } catch (SQLException e) {
             conn.rollback();
@@ -93,8 +98,10 @@ public class CustomerDAO {
         } finally {
             conn.setAutoCommit(true);
         }
+        return false;
     }
 
+    @Override
     public ArrayList<Customer> selectAll() throws SQLException {
         if(conn == null) {
             return null;
@@ -125,6 +132,7 @@ public class CustomerDAO {
         return listCustomers;
     }
 
+    @Override
     public Customer getByID(int id) throws SQLException {
         if(conn == null) {
             return null;
@@ -136,7 +144,7 @@ public class CustomerDAO {
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+                if (rs.next()) {
                     String name = rs.getString("customer_name");
                     String contact = rs.getString("contact_name");
                     String address = rs.getString("address");
